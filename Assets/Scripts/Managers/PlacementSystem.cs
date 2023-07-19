@@ -31,6 +31,7 @@ public class PlacementSystem : MonoBehaviour
 
     private GridData gridData;
 
+    //This indicates whenwver a player is clicked
     public static bool PlacingTime = false;
 
     private List<GameObject> _placedGameObjects = new();
@@ -141,10 +142,22 @@ public class PlacementSystem : MonoBehaviour
         bool canBePlaced = gridData.CanPlaceObjectAt(gridPosition);
         _previewRenderer.material.color = canBePlaced ? Color.green : Color.red;
 
+        if (PlacingTime)
+        {
+            if (!_showBuildingPlacementUI.activeInHierarchy)
+            {
+                PlacingTime = false;
+            }
+        }
 
-        if ((!canBePlaced && !PlacingTime) || _previewRenderer.material.color == Color.red)
+        if (!canBePlaced && !PlacingTime)
         {
             _showBuildingPlacementUI.SetActive(false);
+        }
+
+        if (PlacingTime)
+        {
+            _showBuildingRemovalOrUpgradeUI.SetActive(false);
         }
 
         mouseIndicator.transform.position = mousePosition;
